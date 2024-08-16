@@ -1,0 +1,18 @@
+basePath: /
+host: 127.0.0.1:8080
+info:
+  contact: {}
+  description: this is my second homework
+  title: Homework1
+  version: "1.0"
+paths:
+  /task:
+    post:
+      description: Creates a task
+      responses:
+        "200":
+          description: OK
+      summary: Post task
+      tags:
+      - Task
+swagger: "2.0"
