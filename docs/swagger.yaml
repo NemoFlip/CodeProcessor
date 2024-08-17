@@ -12,7 +12,28 @@ paths:
       responses:
         "200":
           description: OK
+        "400":
+          description: Bad Request
       summary: Post task
+      tags:
+      - Task
+  /task/{task_id}:
+    get:
+      description: Get the status of the ongoing task
+      parameters:
+      - description: ID of the task
+        in: path
+        name: task_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+      summary: Get Status
       tags:
       - Task
 swagger: "2.0"
