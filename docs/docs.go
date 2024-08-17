@@ -15,13 +15,25 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/task": {
-            "post": {
-                "description": "Creates a task",
+        "/result/{task_id}": {
+            "get": {
+                "description": "Get the result of the task by its id",
+                "produces": [
+                    "application/json"
+                ],
                 "tags": [
                     "Task"
                 ],
-                "summary": "Post task",
+                "summary": "Get Result",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ID of the task",
+                        "name": "task_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK"
@@ -32,7 +44,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/task/{task_id}": {
+        "/status/{task_id}": {
             "get": {
                 "description": "Get the status of the ongoing task",
                 "produces": [
@@ -51,6 +63,23 @@ const docTemplate = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
+        "/task": {
+            "post": {
+                "description": "Creates a task",
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Post task",
                 "responses": {
                     "200": {
                         "description": "OK"
