@@ -11,11 +11,11 @@ import (
 // @version 1.0
 // @description this is my second homework
 
-// @host 127.0.0.1:8080
+// @host 127.0.0.1:8000
 // @BasePath /
 
 func main() {
-	address := "127.0.0.1:8080"
+	address := "127.0.0.1:8000"
 	stor := storage.NewRamStorage()
 
 	fmt.Printf("Starting a server on address: %s", address)

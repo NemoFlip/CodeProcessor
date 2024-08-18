@@ -81,8 +81,8 @@ const docTemplate = `{
                 ],
                 "summary": "Post task",
                 "responses": {
-                    "200": {
-                        "description": "OK"
+                    "201": {
+                        "description": "Created"
                     },
                     "400": {
                         "description": "Bad Request"
@@ -96,7 +96,7 @@ const docTemplate = `{
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
-	Host:             "127.0.0.1:8080",
+	Host:             "127.0.0.1:8000",
 	BasePath:         "/",
 	Schemes:          []string{},
 	Title:            "Homework1",

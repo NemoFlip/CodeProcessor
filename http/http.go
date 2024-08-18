@@ -28,7 +28,7 @@ func NewServer(storage Storage) *Server {
 // @Summary Post task
 // @Tags Task
 // @Description Creates a task
-// @Success 200
+// @Success 201
 // @Failure 400
 // @Router /task [post]
 func (s *Server) postHandler(ctx *gin.Context) {
@@ -43,7 +43,11 @@ func (s *Server) postHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	ctx.Writer.Write([]byte(newUUID.String()))
+	ctx.Status(http.StatusCreated)
+	ctx.JSON(http.StatusCreated, gin.H{
+		"task_id": newUUID.String(),
+	})
+
 	time.Sleep(5 * time.Second)
 	err = s.storage.Put(newUUID.String(), entity.Task{
 		Status: "ready",
@@ -55,7 +59,6 @@ func (s *Server) postHandler(ctx *gin.Context) {
 		})
 		return
 	}
-
 }
 
 // @Summary Get Status
@@ -70,7 +73,7 @@ func (s *Server) statusHandler(ctx *gin.Context) {
 	taskID := ctx.Param("task_id")
 	value, err := s.storage.Get(taskID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
@@ -99,14 +102,14 @@ func (s *Server) resultHandler(ctx *gin.Context) {
 	taskID := ctx.Param("task_id")
 	value, err := s.storage.Get(taskID)
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
+		ctx.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),
 		})
 		return
 	}
 	if value != nil {
 		ctx.JSON(http.StatusOK, gin.H{
-			"Result": value.Result,
+			"result": value.Result,
 		})
 	} else {
 		ctx.JSON(http.StatusBadRequest, gin.H{
