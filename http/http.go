@@ -44,7 +44,18 @@ func (s *Server) postHandler(ctx *gin.Context) {
 		return
 	}
 	ctx.Writer.Write([]byte(newUUID.String()))
-	time.Sleep(4 * time.Second)
+	time.Sleep(5 * time.Second)
+	err = s.storage.Put(newUUID.String(), entity.Task{
+		Status: "ready",
+		Result: "Task result",
+	})
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+
 }
 
 // @Summary Get Status
