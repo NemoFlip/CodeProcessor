@@ -16,10 +16,11 @@ import (
 
 func main() {
 	address := "127.0.0.1:8000"
-	stor := storage.NewRamStorage()
+	taskStor := storage.NewRamStorage()
+	usrStor := storage.NewUserStorage()
 
 	fmt.Printf("Starting a server on address: %s", address)
-	err := http.CreateAndRunServer(stor, address)
+	err := http.CreateAndRunTaskServer(address, *taskStor, *usrStor)
 
 	if err != nil {
 		fmt.Printf("Can't run the server: %s", err.Error())

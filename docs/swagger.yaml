@@ -1,4 +1,12 @@
 basePath: /
+definitions:
+  entity.User:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 host: 127.0.0.1:8000
 info:
   contact: {}
@@ -6,6 +14,26 @@ info:
   title: Homework1
   version: "1.0"
 paths:
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: register new user
+      parameters:
+      - description: Данные для регистрации пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.User'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+      summary: Register User
+      tags:
+      - User
   /result/{task_id}:
     get:
       description: Get the result of the task by its id
