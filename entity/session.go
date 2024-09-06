@@ -1,6 +1,6 @@
 package entity
 
 type Session struct {
-	user_id    string
-	session_id string
+	UserID    string `json:"user_id"`
+	SessionID string `json:"session_id"`
 }

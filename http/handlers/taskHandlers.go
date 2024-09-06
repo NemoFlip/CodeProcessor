@@ -3,26 +3,31 @@ package handlers
 import (
 	_ "HomeWork1/docs"
 	"HomeWork1/entity"
+	"HomeWork1/rabbitmq"
+	"HomeWork1/rabbitmq/consumer"
 	"HomeWork1/storage"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"net/http"
-	"time"
 )
 
 type TaskServer struct {
-	storage storage.RamStorage
+	storage storage.TaskStorage
 }
 
-func NewTaskServer(storage storage.RamStorage) *TaskServer {
+func NewTaskServer(storage storage.TaskStorage) *TaskServer {
 	return &TaskServer{storage: storage}
 }
 
 // @Summary Post task
 // @Tags Task
 // @Description Creates a task
+// @Accept json
+// @Param code body entity.CodeRequest true "Код, который вы хотите запустить"
 // @Success 201
 // @Failure 400
+// @Failure 401
 // @Router /task [post]
 func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	newUUID := uuid.New()
@@ -42,17 +47,32 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 		"task_id": newUUID.String(),
 	})
 
-	time.Sleep(5 * time.Second)
-	err = s.storage.Put(newUUID.String(), entity.Task{
-		Status: "ready",
-		Result: "Task result",
-	})
+	var codeData entity.CodeRequest
+	err = ctx.BindJSON(&codeData) // get code with compiler-name
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
+		fmt.Printf("failed to get code from json: %s", err.Error())
 	}
+
+	rabbitmq.SendCode(codeData)
+
+	output := consumer.ConsumeMessage()
+	if output != nil {
+		err = s.storage.Put(newUUID.String(), entity.Task{
+			Status: "ready",
+			Result: fmt.Sprintf("%s", output),
+		})
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+	} else {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": "can't run your code properly",
+		})
+	}
+
 }
 
 // @Summary Get Status

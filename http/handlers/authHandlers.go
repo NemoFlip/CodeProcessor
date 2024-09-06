@@ -30,7 +30,6 @@ func NewUserServer(storage storage.UserStorage) *UserServer {
 func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 	var newUser entity.User
 	newUser.ID = uuid.New().String()
-	fmt.Println("Я ТУТ!")
 	if err := ctx.BindJSON(&newUser); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -44,8 +43,17 @@ func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 		})
 		return
 	}
+	ctx.Status(http.StatusCreated)
 }
 
+// @Summary Login User
+// @Tags User
+// @Description login registered user
+// @Accept json
+// @Param user body entity.User true "Данные для авторизации пользователя"
+// @Success 200
+// @Failute 400
+// @Router /login [post]
 func (us *UserServer) LoginHandler(ctx *gin.Context) {
 	var user entity.User
 	if err := ctx.BindJSON(&user); err != nil {
@@ -71,6 +79,6 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 	token := base64.StdEncoding.EncodeToString([]byte(tokenCredentials))
 	ctx.Writer.Header().Set("Authorization", fmt.Sprintf("Bearer %s", token))
 	ctx.JSON(http.StatusOK, gin.H{
-		"success": "User authorized",
+		"token": token,
 	})
 }
