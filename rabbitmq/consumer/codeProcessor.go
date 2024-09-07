@@ -8,7 +8,7 @@ import (
 )
 
 func ConsumeMessage() []byte {
-	conn, err := amqp.Dial("amqp://guest:guest@localhost:5672/")
+	conn, err := amqp.Dial("amqp://guest:guest@127.0.0.1:5672/")
 	if err != nil {
 		fmt.Printf("Can't run the RabbitMQ server: %s", err.Error())
 		return nil
