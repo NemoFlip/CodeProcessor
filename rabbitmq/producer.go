@@ -8,7 +8,7 @@ import (
 )
 
 func SendCode(data entity.CodeRequest) {
-	conn, err := amqp.Dial("amqp://guest:guest@127.0.0.1:5672/") // Создаем подключение к RabbitMQ
+	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/") // Создаем подключение к RabbitMQ
 	if err != nil {
 		fmt.Printf("Can't run the RabbitMQ server: %s", err.Error())
 		return

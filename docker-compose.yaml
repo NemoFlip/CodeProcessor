@@ -1,18 +1,31 @@
-
 services:
   homework1:
     build:
       context: .
       dockerfile: Dockerfile
-    depends_on:
-      - rabbitmq
-    environment:
-      RABBITMQ_HOST: rabbitmq
     ports:
       - 8000:8000
-
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock # Монитируем сокет хоста(daemon) в docker контейнер
+  tests:
+    build:
+      context: .
+      dockerfile: test/Dockerfile
+    depends_on:
+      homework1:
+        condition: service_started
+      rabbitmq:
+        condition: service_healthy
   rabbitmq:
-    image: rabbitmq:management
+    image: rabbitmq:3-management
     ports:
       - 5672:5672
       - 15672:15672
+    healthcheck:
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 10s
+      retries: 5

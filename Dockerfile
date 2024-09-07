@@ -1,6 +1,8 @@
 #syntax=docker/dockerfile:1
 FROM golang:latest
 
+RUN apt-get update && apt-get install -y docker.io
+
 WORKDIR hw1
 COPY . .
 
