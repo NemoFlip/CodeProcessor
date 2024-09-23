@@ -8,6 +8,6 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o ./bin/homework1 cmd/main.go
+RUN go build -o ./bin/homework1 cmd/app/main.go
 
 CMD ["./bin/homework1"]
