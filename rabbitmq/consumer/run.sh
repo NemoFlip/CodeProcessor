@@ -3,7 +3,7 @@
 case "$LANG" in
   "python3")
     echo "Запуск Python-кода..."
-    python3 pycode.py
+    python3 pyCode.py
     ;;
   "clang")
     echo "Запуск C-кода..."
