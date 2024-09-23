@@ -6,7 +6,7 @@ RUN apk add --no-cache python3
 
 COPY ../../pyCode.py .
 
-COPY rabbitmq/consumer/run.sh .
+COPY code_service/run.sh .
 
 RUN chmod +x run.sh
 

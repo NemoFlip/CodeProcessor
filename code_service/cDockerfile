@@ -5,7 +5,7 @@ WORKDIR code
 RUN apk add --no-cache clang musl-dev
 
 COPY ../../cCode.c .
-COPY rabbitmq/consumer/run.sh .
+COPY code_service/run.sh .
 
 RUN chmod +x run.sh
 

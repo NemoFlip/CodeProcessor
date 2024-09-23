@@ -1,10 +1,10 @@
 package handlers
 
 import (
+	"HomeWork1/code_service"
 	_ "HomeWork1/docs"
 	"HomeWork1/entity"
 	"HomeWork1/rabbitmq"
-	"HomeWork1/rabbitmq/consumer"
 	"HomeWork1/storage"
 	"fmt"
 	"github.com/gin-gonic/gin"
