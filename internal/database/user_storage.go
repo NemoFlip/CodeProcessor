@@ -1,7 +1,7 @@
-package storage
+package database
 
 import (
-	"HomeWork1/entity"
+	"HomeWork1/internal/entity"
 	"errors"
 )
 

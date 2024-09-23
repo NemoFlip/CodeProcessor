@@ -3,9 +3,9 @@ package handlers
 import (
 	"HomeWork1/code_service"
 	_ "HomeWork1/docs"
-	"HomeWork1/entity"
-	"HomeWork1/rabbitmq"
-	"HomeWork1/storage"
+	"HomeWork1/internal/database"
+	"HomeWork1/internal/entity"
+	"HomeWork1/internal/transport/rabbitmq"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -13,10 +13,10 @@ import (
 )
 
 type TaskServer struct {
-	storage storage.TaskStorage
+	storage database.TaskStorage
 }
 
-func NewTaskServer(storage storage.TaskStorage) *TaskServer {
+func NewTaskServer(storage database.TaskStorage) *TaskServer {
 	return &TaskServer{storage: storage}
 }
 
