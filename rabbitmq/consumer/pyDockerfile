@@ -1,0 +1,13 @@
+FROM golang:alpine
+
+WORKDIR code
+
+RUN apk add --no-cache python3
+
+COPY ../../pyCode.py .
+
+COPY rabbitmq/consumer/run.sh .
+
+RUN chmod +x run.sh
+
+CMD ["/bin/sh", "run.sh"]

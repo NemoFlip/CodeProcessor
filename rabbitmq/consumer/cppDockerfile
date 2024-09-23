@@ -1,0 +1,12 @@
+FROM golang:alpine
+
+WORKDIR code
+
+RUN apk add --no-cache g++ musl-dev
+
+COPY ../../gcc.cpp .
+COPY rabbitmq/consumer/run.sh .
+
+RUN chmod +x run.sh
+
+CMD ["/bin/sh", "run.sh"]
