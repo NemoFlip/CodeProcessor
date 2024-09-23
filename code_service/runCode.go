@@ -11,7 +11,7 @@ import (
 
 func RunCode(codeInfo entity.CodeRequest) []byte {
 	var fileName string
-	var dockerPath = "rabbitmq/consumer"
+	var dockerPath = "code_service"
 	//var imageName string
 	switch codeInfo.Translator {
 	case "python3":

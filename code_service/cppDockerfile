@@ -5,7 +5,7 @@ WORKDIR code
 RUN apk add --no-cache g++ musl-dev
 
 COPY ../../gcc.cpp .
-COPY rabbitmq/consumer/run.sh .
+COPY code_service/run.sh .
 
 RUN chmod +x run.sh
 
