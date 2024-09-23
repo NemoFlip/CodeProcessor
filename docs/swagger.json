@@ -9,6 +9,65 @@
     "host": "127.0.0.1:8000",
     "basePath": "/",
     "paths": {
+        "/login": {
+            "post": {
+                "description": "login registered user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Login User",
+                "parameters": [
+                    {
+                        "description": "Данные для авторизации пользователя",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "description": "register new user",
+                "consumes": [
+                    "application/json"
+                ],
+                "tags": [
+                    "User"
+                ],
+                "summary": "Register User",
+                "parameters": [
+                    {
+                        "description": "Данные для регистрации пользователя",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Created"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    }
+                }
+            }
+        },
         "/result/{task_id}": {
             "get": {
                 "description": "Get the result of the task by its id",
@@ -70,17 +129,58 @@
         "/task": {
             "post": {
                 "description": "Creates a task",
+                "consumes": [
+                    "application/json"
+                ],
                 "tags": [
                     "Task"
                 ],
                 "summary": "Post task",
+                "parameters": [
+                    {
+                        "description": "Код, который вы хотите запустить",
+                        "name": "code",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/entity.CodeRequest"
+                        }
+                    }
+                ],
                 "responses": {
                     "201": {
                         "description": "Created"
                     },
                     "400": {
                         "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
                     }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "entity.CodeRequest": {
+            "type": "object",
+            "properties": {
+                "code": {
+                    "type": "string"
+                },
+                "translator": {
+                    "type": "string"
+                }
+            }
+        },
+        "entity.User": {
+            "type": "object",
+            "properties": {
+                "password": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
                 }
             }
         }

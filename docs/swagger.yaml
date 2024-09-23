@@ -1,4 +1,19 @@
 basePath: /
+definitions:
+  entity.CodeRequest:
+    properties:
+      code:
+        type: string
+      translator:
+        type: string
+    type: object
+  entity.User:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
 host: 127.0.0.1:8000
 info:
   contact: {}
@@ -6,6 +21,44 @@ info:
   title: Homework1
   version: "1.0"
 paths:
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: login registered user
+      parameters:
+      - description: Данные для авторизации пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.User'
+      responses:
+        "200":
+          description: OK
+      summary: Login User
+      tags:
+      - User
+  /register:
+    post:
+      consumes:
+      - application/json
+      description: register new user
+      parameters:
+      - description: Данные для регистрации пользователя
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/entity.User'
+      responses:
+        "201":
+          description: Created
+        "400":
+          description: Bad Request
+      summary: Register User
+      tags:
+      - User
   /result/{task_id}:
     get:
       description: Get the result of the task by its id
@@ -46,12 +99,23 @@ paths:
       - Task
   /task:
     post:
+      consumes:
+      - application/json
       description: Creates a task
+      parameters:
+      - description: Код, который вы хотите запустить
+        in: body
+        name: code
+        required: true
+        schema:
+          $ref: '#/definitions/entity.CodeRequest'
       responses:
         "201":
           description: Created
         "400":
           description: Bad Request
+        "401":
+          description: Unauthorized
       summary: Post task
       tags:
       - Task
