@@ -2,8 +2,8 @@ package handlers
 
 import (
 	_ "HomeWork1/docs"
-	"HomeWork1/entity"
-	"HomeWork1/storage"
+	"HomeWork1/internal/database"
+	"HomeWork1/internal/entity"
 	"encoding/base64"
 	"fmt"
 	"github.com/gin-gonic/gin"
@@ -12,10 +12,10 @@ import (
 )
 
 type UserServer struct {
-	storage storage.UserStorage
+	storage database.UserStorage
 }
 
-func NewUserServer(storage storage.UserStorage) *UserServer {
+func NewUserServer(storage database.UserStorage) *UserServer {
 	return &UserServer{storage: storage}
 }
 

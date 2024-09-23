@@ -1,7 +1,7 @@
 package consumer
 
 import (
-	"HomeWork1/entity"
+	"HomeWork1/internal/entity"
 	"fmt"
 	"log"
 	"os"

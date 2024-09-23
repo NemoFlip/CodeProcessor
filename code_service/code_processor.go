@@ -1,7 +1,7 @@
 package consumer
 
 import (
-	"HomeWork1/entity"
+	"HomeWork1/internal/entity"
 	"encoding/json"
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
