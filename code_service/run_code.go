@@ -12,12 +12,10 @@ import (
 func RunCode(codeInfo entity.CodeRequest) []byte {
 	var fileName string
 	var dockerPath = "code_service"
-	//var imageName string
 	switch codeInfo.Translator {
 	case "python3":
 		fileName = "pyCode.py"
 		dockerPath = filepath.Join(dockerPath, "pyDockerfile")
-		//imageName =
 	case "clang":
 		fileName = "cCode.c"
 		dockerPath = filepath.Join(dockerPath, "cDockerfile")
@@ -36,14 +34,20 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		return nil
 	}
 
-	cmd = exec.Command("docker", "run", "--rm", "-e", "LANG="+codeInfo.Translator, "code-app")
+	cmd = exec.Command(
+		"docker", "run", "--rm",
+		"--memory=256m",
+		"--ulimit", "cpu=1",
+		"-e", "LANG="+codeInfo.Translator,
+		"code-app",
+	)
+
 	output, err := cmd.CombinedOutput()
 	if err != nil {
 		fmt.Printf("failed to run the Docker container: %s\n", err.Error())
 		return nil
 	}
-	// Вывод результата
 	fmt.Printf("Output:\n%s\n", string(output))
-	exec.Command("docker", "rmi", "code-app")
+	//exec.Command("docker", "rmi", "code-app")
 	return output
 }

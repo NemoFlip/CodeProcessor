@@ -33,7 +33,7 @@ def auth_token(user_data):
 
 def get_code_processor_payload():
     return {"translator": "python3",
-    "code": "print('hello world!')"}
+    "code": "print('hello world')"}
 #     return {"translator": "clang",
 #             "code": "#include <stdio.h> \nint main() { \nprintf(\"Hello, World!\"); \nreturn 0;\n }"}
 
