@@ -16,12 +16,13 @@ import (
 
 func main() {
 	address := ":8000"
-	taskStor := database.NewTaskStorage()
-	usrStor := database.NewUserStorage()
+	taskStorage := database.NewTaskStorage()
+	usrStorage := database.NewUserStorage()
+	sessionStorage := database.NewSessionStorage()
 
 	fmt.Printf("Starting a server on address: %s", address)
 
-	err := app.CreateAndRunTaskServer(address, *taskStor, *usrStor) // Запускаем сервер на порту 8000
+	err := app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage) // Запускаем сервер на порту 8000
 
 	if err != nil {
 		fmt.Printf("Can't run the server: %s", err.Error())

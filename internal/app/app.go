@@ -9,9 +9,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func CreateAndRunTaskServer(addr string, taskStorage database.TaskStorage, userStorage database.UserStorage) error {
+func CreateAndRunTaskServer(addr string, taskStorage database.TaskStorage, userStorage database.UserStorage, sessionStorage database.SessionStorage) error {
 	taskServer := handlers2.NewTaskServer(taskStorage)
-	userServer := handlers2.NewUserServer(userStorage)
+	userServer := handlers2.NewUserServer(userStorage, sessionStorage)
 	router := gin.Default()
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -12,11 +12,14 @@ import (
 )
 
 type UserServer struct {
-	storage database.UserStorage
+	userStorage    database.UserStorage
+	sessionStorage database.SessionStorage
 }
 
-func NewUserServer(storage database.UserStorage) *UserServer {
-	return &UserServer{storage: storage}
+func NewUserServer(userStorage database.UserStorage, sessionStorage database.SessionStorage) *UserServer {
+	return &UserServer{userStorage: userStorage,
+		sessionStorage: sessionStorage,
+	}
 }
 
 // @Summary Register User
@@ -36,7 +39,7 @@ func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	err := us.storage.Post(newUser) // TODO: Хэшировать пароли
+	err := us.userStorage.Post(newUser) // TODO: Хэшировать пароли
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -62,7 +65,7 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	userFromDB, err := us.storage.Get(user.Login)
+	userFromDB, err := us.userStorage.Get(user.Login)
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
@@ -81,4 +84,9 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, gin.H{
 		"token": token,
 	})
+	newSession := entity.Session{
+		UserID:    userFromDB.ID,
+		SessionID: token,
+	}
+	us.sessionStorage.Post(newSession)
 }
