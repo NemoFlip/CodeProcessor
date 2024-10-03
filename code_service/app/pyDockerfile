@@ -4,9 +4,9 @@ WORKDIR code
 
 RUN apk add --no-cache python3
 
-COPY ../../pyCode.py .
+COPY ../../../pyCode.py .
 
-COPY code_service/run.sh .
+COPY code_service/app/run.sh .
 
 RUN chmod +x run.sh
 

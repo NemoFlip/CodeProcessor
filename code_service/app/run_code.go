@@ -1,4 +1,4 @@
-package consumer
+package app
 
 import (
 	"HomeWork1/internal/entity"
@@ -11,7 +11,7 @@ import (
 
 func RunCode(codeInfo entity.CodeRequest) []byte {
 	var fileName string
-	var dockerPath = "code_service"
+	var dockerPath = "code_service/app"
 	switch codeInfo.Translator {
 	case "python3":
 		fileName = "pyCode.py"
@@ -48,6 +48,6 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		return nil
 	}
 	fmt.Printf("Output:\n%s\n", string(output))
-	//exec.Command("docker", "rmi", "code-app")
+	exec.Command("docker", "rmi", "code-app")
 	return output
 }

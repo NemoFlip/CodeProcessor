@@ -5,7 +5,8 @@ WORKDIR code
 RUN apk add --no-cache clang musl-dev
 
 COPY ../../cCode.c .
-COPY code_service/run.sh .
+
+COPY code_service/app/run.sh .
 
 RUN chmod +x run.sh
 

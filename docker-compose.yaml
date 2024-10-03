@@ -8,8 +8,15 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+  code_service:
+    build:
+      context: .
+      dockerfile: code_service/Dockerfile
+    ports:
+      - 8001:8001
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock # Монитируем сокет хоста(daemon) в docker контейнер
+      - /var/run/docker.sock:/var/run/docker.sock # allows to use docker-daemon inside a container - to call docker commands inside a container
+
   tests:
     build:
       context: .

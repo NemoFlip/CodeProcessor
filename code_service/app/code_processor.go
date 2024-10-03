@@ -1,4 +1,4 @@
-package consumer
+package app
 
 import (
 	"HomeWork1/internal/entity"

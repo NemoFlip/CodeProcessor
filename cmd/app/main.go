@@ -22,7 +22,7 @@ func main() {
 
 	fmt.Printf("Starting a server on address: %s", address)
 
-	err := app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage) // Запускаем сервер на порту 8000
+	err := app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage)
 
 	if err != nil {
 		fmt.Printf("Can't run the server: %s", err.Error())

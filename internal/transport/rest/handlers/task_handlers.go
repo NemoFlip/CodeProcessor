@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"HomeWork1/code_service"
 	_ "HomeWork1/docs"
 	"HomeWork1/internal/database"
 	"HomeWork1/internal/entity"
@@ -9,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"io"
 	"net/http"
 )
 
@@ -54,12 +54,18 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	}
 
 	rabbitmq.SendCode(codeData)
-
-	output := consumer.ConsumeMessage()
-	if output != nil {
+	output, err := http.Get("http://code_service:8001/result")
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error": err.Error(),
+		})
+		return
+	}
+	if output.Body != nil {
+		result, err := io.ReadAll(output.Body)
 		err = s.storage.Put(newUUID.String(), entity.Task{
 			Status: "ready",
-			Result: fmt.Sprintf("%s", output),
+			Result: fmt.Sprintf("%s", result),
 		})
 		if err != nil {
 			ctx.JSON(http.StatusBadRequest, gin.H{
