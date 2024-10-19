@@ -5,6 +5,7 @@ import (
 	"HomeWork1/internal/app"
 	"HomeWork1/internal/database"
 	"fmt"
+	"log"
 )
 
 // @title Homework1
@@ -16,13 +17,17 @@ import (
 
 func main() {
 	address := ":8000"
+	_, err := database.ConnectToDB()
+	if err != nil {
+		log.Println(err)
+	}
 	taskStorage := database.NewTaskStorage()
 	usrStorage := database.NewUserStorage()
 	sessionStorage := database.NewSessionStorage()
 
 	fmt.Printf("Starting a server on address: %s", address)
 
-	err := app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage)
+	err = app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage)
 
 	if err != nil {
 		fmt.Printf("Can't run the server: %s", err.Error())

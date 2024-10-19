@@ -8,6 +8,8 @@ services:
     depends_on:
       rabbitmq:
         condition: service_healthy
+      postgres:
+        condition: service_started
   code_service:
     build:
       context: .
@@ -26,6 +28,17 @@ services:
         condition: service_started
       rabbitmq:
         condition: service_healthy
+      postgres:
+        condition: service_started
+  postgres:
+    container_name: postgres_container
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: maindb
   rabbitmq:
     image: rabbitmq:3-management
     ports:
