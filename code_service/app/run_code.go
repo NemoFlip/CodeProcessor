@@ -48,6 +48,6 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		return nil
 	}
 	fmt.Printf("Output:\n%s\n", string(output))
-	exec.Command("docker", "rmi", "code-app")
+	exec.Command("docker", "rmi", "code-app").Run()
 	return output
 }
