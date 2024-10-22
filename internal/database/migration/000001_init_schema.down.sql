@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS users;
+SELECT id, login, password FROM users WHERE id = '7c2c7fd5-932c-49af-8a2d-c8fba2acf55d';

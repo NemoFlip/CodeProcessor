@@ -31,10 +31,10 @@ func NewTaskServer(storage database.TaskStorage) *TaskServer {
 // @Router /task [post]
 func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	newUUID := uuid.New()
-	err := s.storage.Post(newUUID.String(), entity.Task{
+	err := s.storage.Post(entity.Task{
+		ID:     newUUID.String(),
 		Status: "in_progress",
 		Result: "",
-		ID:     newUUID.String(),
 	})
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
@@ -63,7 +63,8 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	}
 	if output.Body != nil {
 		result, err := io.ReadAll(output.Body)
-		err = s.storage.Put(newUUID.String(), entity.Task{
+		err = s.storage.Put(entity.Task{
+			ID:     newUUID.String(),
 			Status: "ready",
 			Result: fmt.Sprintf("%s", result),
 		})

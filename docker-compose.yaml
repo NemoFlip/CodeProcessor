@@ -39,6 +39,19 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: maindb
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  migrate:
+    image: migrate/migrate:v4.15.2
+    command: -path=/migrations -database postgresql://postgres:postgres@postgres:5432/maindb?sslmode=disable up
+    volumes:
+      - ./internal/database/migration:/migrations # for access to host files
+    depends_on:
+      postgres:
+        condition: service_healthy
   rabbitmq:
     image: rabbitmq:3-management
     ports:

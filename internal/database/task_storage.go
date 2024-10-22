@@ -2,42 +2,94 @@ package database
 
 import (
 	"HomeWork1/internal/entity"
+	"database/sql"
 	"errors"
+	"fmt"
 )
 
 type TaskStorage struct {
-	data map[string]entity.Task
+	DB *sql.DB
 }
 
-func NewTaskStorage() *TaskStorage {
-	return &TaskStorage{data: make(map[string]entity.Task)}
+func NewTaskStorage(db *sql.DB) *TaskStorage {
+	return &TaskStorage{DB: db}
 }
 
-func (rs *TaskStorage) Get(key string) (*entity.Task, error) {
-	if val, ok := rs.data[key]; !ok {
-		return nil, errors.New("there is no such key")
-	} else {
-		return &val, nil
+func (ts *TaskStorage) Get(id string) (*entity.Task, error) {
+	query := "SELECT id, status, result FROM tasks WHERE id = $1"
+
+	row := ts.DB.QueryRow(query, id)
+
+	var task entity.Task
+
+	err := row.Scan(&task.ID, &task.Status, &task.Result)
+	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, fmt.Errorf("task with id(%s) is not found", id)
+		}
+		return nil, fmt.Errorf("unable to scan task: %w", err)
 	}
+
+	return &task, err
 }
 
-func (rs *TaskStorage) Put(key string, val entity.Task) error {
-	rs.data[key] = val
+func (ts *TaskStorage) Put(task entity.Task) error {
+	query := "UPDATE tasks SET status = $2, result = $3 WHERE id = $1"
+
+	result, err := ts.DB.Exec(query, task.ID, task.Status, task.Result)
+
+	if err != nil {
+		return fmt.Errorf("unable to update task with id(%s): %w", task.ID, err)
+	}
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error getting rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no rows were updated")
+
+	}
 	return nil
 }
 
-func (rs *TaskStorage) Post(key string, value entity.Task) error {
-	if _, exists := rs.data[key]; exists {
-		return errors.New("key is already exists")
+func (ts *TaskStorage) Post(task entity.Task) error {
+	query := "INSERT INTO tasks (id, status, result) VALUES($1, $2, $3)"
+
+	result, err := ts.DB.Exec(query, task.ID, task.Status, task.Result)
+	if err != nil {
+		return fmt.Errorf("unable to insert new user: %w", err)
 	}
-	rs.data[key] = value
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error getting rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no rows were inserted")
+	}
+
 	return nil
 }
 
-func (rs *TaskStorage) Delete(key string) error {
-	if _, exists := rs.data[key]; !exists {
-		return errors.New("key is not found")
+func (ts *TaskStorage) Delete(id string) error {
+	query := "DELETE FROM tasks WHERE id = $1"
+	//TODO: INSERT DRY CONCEPT
+	result, err := ts.DB.Exec(query, id)
+	if err != nil {
+		return fmt.Errorf("unable to insert new user: %w", err)
 	}
-	delete(rs.data, key)
+
+	rowsAffected, err := result.RowsAffected()
+	if err != nil {
+		return fmt.Errorf("error getting rows affected: %w", err)
+	}
+
+	if rowsAffected == 0 {
+		return fmt.Errorf("no rows were inserted")
+	}
+
 	return nil
 }

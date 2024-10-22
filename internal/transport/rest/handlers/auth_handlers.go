@@ -32,20 +32,23 @@ func NewUserServer(userStorage database.UserStorage, sessionStorage database.Ses
 // @Router /register [post]
 func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 	var newUser entity.User
-	newUser.ID = uuid.New().String()
 	if err := ctx.BindJSON(&newUser); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		fmt.Println("Ошибка регистрации:", err)
 		return
 	}
+	newUser.ID = uuid.New().String()
 	err := us.userStorage.Post(newUser) // TODO: Хэшировать пароли
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
+		fmt.Println(err)
 		return
 	}
+	fmt.Println("Я ТУТ!! Ошибки нет")
 	ctx.Status(http.StatusCreated)
 }
 

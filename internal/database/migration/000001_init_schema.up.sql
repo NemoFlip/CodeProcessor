@@ -1,5 +1,11 @@
 CREATE TABLE IF NOT EXISTS users(
     id VARCHAR(255) PRIMARY KEY NOT NULL,
-    login VARCHAR(100) NOT NULL,
+    login VARCHAR(100) UNIQUE NOT NULL,
     password VARCHAR(100) NOT NULL
+);
+CREATE TYPE status as ENUM('in_progress', 'ready');
+CREATE TABLE IF NOT EXISTS tasks(
+  id VARCHAR(255) PRIMARY KEY NOT NULL,
+  status status NOT NULL,
+  result TEXT
 );

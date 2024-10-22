@@ -17,12 +17,12 @@ import (
 
 func main() {
 	address := ":8000"
-	_, err := database.ConnectToDB()
+	db, err := database.ConnectToDB()
 	if err != nil {
 		log.Println(err)
 	}
-	taskStorage := database.NewTaskStorage()
-	usrStorage := database.NewUserStorage()
+	taskStorage := database.NewTaskStorage(db)
+	usrStorage := database.NewUserStorage(db)
 	sessionStorage := database.NewSessionStorage()
 
 	fmt.Printf("Starting a server on address: %s", address)
