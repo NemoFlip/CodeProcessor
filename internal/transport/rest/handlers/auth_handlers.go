@@ -91,5 +91,8 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 		UserID:    userFromDB.ID,
 		SessionID: token,
 	}
-	us.sessionStorage.Post(newSession)
+	err = us.sessionStorage.Post(newSession)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

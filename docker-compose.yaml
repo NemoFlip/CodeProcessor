@@ -9,6 +9,8 @@ services:
       rabbitmq:
         condition: service_healthy
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_started
   code_service:
     build:
@@ -18,17 +20,12 @@ services:
       - 8001:8001
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock # allows to use docker-daemon inside a container - to call docker commands inside a container
-
   tests:
     build:
       context: .
       dockerfile: test/Dockerfile
     depends_on:
       homework1:
-        condition: service_started
-      rabbitmq:
-        condition: service_healthy
-      postgres:
         condition: service_started
   postgres:
     container_name: postgres_container
@@ -62,3 +59,10 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
+  redis:
+    image: redis:latest
+    ports:
+      - 6379:6379
+    environment:
+      - REDIS_PASSWORD=1234
+    command: ["redis-server", "--requirepass", "1234"]
