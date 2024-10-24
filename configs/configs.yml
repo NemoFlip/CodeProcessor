@@ -1,0 +1,26 @@
+server_main:
+  name: "Main Server"
+  port: 8000
+  database_postgres:
+    host: "postgres"
+    port: 5432
+    username: "postgres"
+    password: "postgres"
+    dbname: "maindb"
+    sslmode: "disable"
+  database_redis:
+    host: "redis"
+    port: 6379
+    password: "1234"
+    db: 0
+
+rabbitmq:
+  host: "rabbitmq"
+  port: 5672
+  username: "guest"
+  password: "guest"
+
+server_code:
+  name: "Code Service"
+  port: 8001
+

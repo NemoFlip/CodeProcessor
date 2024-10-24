@@ -1,6 +1,7 @@
 package app
 
 import (
+	"HomeWork1/configs"
 	"HomeWork1/internal/entity"
 	"encoding/json"
 	"fmt"
@@ -8,7 +9,17 @@ import (
 )
 
 func ConsumeMessage() []byte {
-	conn, err := amqp.Dial("amqp://guest:guest@rabbitmq:5672/")
+	cfg, err := configs.GetConfig()
+	if err != nil {
+		fmt.Printf("unable to parse config file: %s", err)
+		return nil
+	}
+	amqpUrl := fmt.Sprintf("amqp://%s:%s@%s:%d/",
+		cfg.RabbitMQ.Username,
+		cfg.RabbitMQ.Password,
+		cfg.RabbitMQ.Host,
+		cfg.RabbitMQ.Port)
+	conn, err := amqp.Dial(amqpUrl)
 	if err != nil {
 		fmt.Printf("Can't run the RabbitMQ server: %s", err.Error())
 		return nil

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"HomeWork1/configs"
 	_ "HomeWork1/docs"
 	"HomeWork1/internal/app"
 	"HomeWork1/internal/database"
@@ -16,14 +17,19 @@ import (
 // @BasePath /
 
 func main() {
-	address := ":8000"
-	db, err := database.ConnectToDB()
+	cfg, err := configs.GetConfig()
+	if err != nil {
+		log.Fatalf("unable to parse config file: %s", err)
+	}
+
+	address := fmt.Sprintf(":%d", cfg.ServerMain.Port)
+	db, err := database.ConnectToDB(*cfg)
 	if err != nil {
 		log.Println(err)
 	}
 	taskStorage := database.NewTaskStorage(db)
 	usrStorage := database.NewUserStorage(db)
-	sessionStorage := database.NewSessionStorage()
+	sessionStorage := database.NewSessionStorage(*cfg)
 
 	fmt.Printf("Starting a server on address: %s", address)
 
