@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 )
 
@@ -16,7 +17,13 @@ type UserServer struct {
 	sessionStorage database.SessionStorage
 }
 
+var userRegistered = prometheus.NewCounter(
+	prometheus.CounterOpts{
+		Name: "user_registered",
+	})
+
 func NewUserServer(userStorage database.UserStorage, sessionStorage database.SessionStorage) *UserServer {
+	prometheus.MustRegister(userRegistered)
 	return &UserServer{userStorage: userStorage,
 		sessionStorage: sessionStorage,
 	}
@@ -48,8 +55,8 @@ func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 		fmt.Println(err)
 		return
 	}
-	fmt.Println("Я ТУТ!! Ошибки нет")
 	ctx.Status(http.StatusCreated)
+	userRegistered.Inc()
 }
 
 // @Summary Login User
@@ -95,4 +102,5 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 	if err != nil {
 		fmt.Println(err)
 	}
+
 }

@@ -5,6 +5,7 @@ import (
 	"HomeWork1/internal/transport/middleware"
 	handlers2 "HomeWork1/internal/transport/rest/handlers"
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -27,6 +28,11 @@ func CreateAndRunTaskServer(addr string, taskStorage database.TaskStorage, userS
 	// Auth handlers
 	router.POST("/register", userServer.RegisterHandler)
 	router.POST("/login", userServer.LoginHandler)
+
+	// Metrics handlers
+	router.GET("/metrics", func(ctx *gin.Context) {
+		promhttp.Handler().ServeHTTP(ctx.Writer, ctx.Request)
+	})
 
 	err := router.Run(addr)
 	if err != nil {

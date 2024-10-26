@@ -8,15 +8,33 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"github.com/prometheus/client_golang/prometheus"
 	"io"
+	"log"
 	"net/http"
+	"time"
 )
 
 type TaskServer struct {
 	storage database.TaskStorage
 }
 
+var taskDuration = prometheus.NewHistogram(
+	prometheus.HistogramOpts{
+		Name:    "request_duration_seconds",
+		Help:    "Distribution of code_processor request duration",
+		Buckets: []float64{0.01, 0.05, 0.1, 0.5, 1, 2, 5},
+	})
+var translatorUsed = prometheus.NewCounterVec(
+	prometheus.CounterOpts{
+		Name: "translator_used_total",
+		Help: "Count of certain translator",
+	},
+	[]string{"translator_name"})
+
 func NewTaskServer(storage database.TaskStorage) *TaskServer {
+	prometheus.MustRegister(taskDuration)
+	prometheus.MustRegister(translatorUsed)
 	return &TaskServer{storage: storage}
 }
 
@@ -50,9 +68,11 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	var codeData entity.CodeRequest
 	err = ctx.BindJSON(&codeData) // get code with compiler-name
 	if err != nil {
-		fmt.Printf("failed to get code from json: %s", err.Error())
+		log.Printf("failed to get code from json: %s", err.Error())
+		return
 	}
-
+	// Request time measuring
+	start := time.Now()
 	rabbitmq.SendCode(codeData)
 	output, err := http.Get("http://code_service:8001/result")
 	if err != nil {
@@ -78,8 +98,10 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": "can't run your code properly",
 		})
+		return
 	}
-
+	taskDuration.Observe(time.Since(start).Seconds())
+	translatorUsed.WithLabelValues(codeData.Translator).Inc()
 }
 
 // @Summary Get Status
