@@ -1,9 +1,8 @@
-FROM python:latest
+FROM python:3.9-slim
 
 WORKDIR testPy
 
-RUN pip install pytest
-RUN pip install requests
+RUN pip install pytest requests
 
 COPY test/tests.py .
 

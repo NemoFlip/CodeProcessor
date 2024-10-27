@@ -1,13 +1,18 @@
 #syntax=docker/dockerfile:1
-FROM golang:latest
+# Stage 1: Build
+FROM golang:1.22-alpine AS builder
 
-
-
-WORKDIR hw1
+WORKDIR /hw1
 COPY . .
 
 RUN go mod download
 
-RUN go build -o ./bin/homework1 cmd/app/main.go
+RUN go build -o /homework1 cmd/app/main.go
 
-CMD ["./bin/homework1"]
+# Stage 2: Final image
+FROM alpine:latest
+
+COPY --from=builder /homework1 /bin/homework1
+COPY configs /configs
+
+CMD ["/bin/homework1"]

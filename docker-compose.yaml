@@ -66,3 +66,15 @@ services:
     environment:
       - REDIS_PASSWORD=1234
     command: ["redis-server", "--requirepass", "1234"]
+  grafana:
+    image: grafana/grafana
+    ports:
+      - 3000:3000
+  prometheus:
+    image: prom/prometheus:latest
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - 9090:9090
+    depends_on:
+        - homework1
