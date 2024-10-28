@@ -28,7 +28,7 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		fmt.Printf("failed to create the file: %s", err.Error())
 		return nil
 	}
-	cmd := exec.Command("docker", "build", "-f", dockerPath, "-t", "code-app", "--force-rm", ".") // todo: do not create if exists
+	cmd := exec.Command("docker", "build", "-f", dockerPath, "-t", "code-app", "--force-rm", ".")
 	if err = cmd.Run(); err != nil {
 		log.Fatalf("Failed to build Docker image: %v", err.Error())
 		return nil
