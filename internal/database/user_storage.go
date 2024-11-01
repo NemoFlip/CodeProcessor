@@ -35,7 +35,6 @@ func (us *UserStorage) Post(newUser entity.User) error {
 	if rowsAffected == 0 {
 		return fmt.Errorf("no rows were inserted")
 	}
-
 	return nil
 }
 
