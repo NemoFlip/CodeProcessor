@@ -5,6 +5,7 @@ import (
 	_ "HomeWork1/docs"
 	"HomeWork1/internal/app"
 	"HomeWork1/internal/database"
+	"HomeWork1/pkg"
 	"fmt"
 	"log"
 )
@@ -21,7 +22,7 @@ func main() {
 	}
 
 	address := fmt.Sprintf(":%d", cfg.ServerMain.Port)
-	db, err := database.PostgresConnect(*cfg)
+	db, err := pkg.PostgresConnect(*cfg)
 	if err != nil {
 		log.Println(err)
 	}

@@ -1,4 +1,4 @@
-package database
+package pkg
 
 import (
 	"HomeWork1/configs"
