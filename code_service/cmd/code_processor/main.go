@@ -11,7 +11,7 @@ import (
 func main() {
 	cfg, err := configs.GetConfig()
 	if err != nil {
-		fmt.Printf("unable to parse config file: %s", err)
+		log.Printf("unable to parse config file: %s", err)
 		return
 	}
 	addr := fmt.Sprintf(":%d", cfg.ServerCode.Port)

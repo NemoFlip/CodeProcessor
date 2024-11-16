@@ -12,10 +12,8 @@ import (
 // @title CodeProcessor
 // @version 1.0
 // @description App for running user's code in virtual environment
-
 // @host localhost:8000
 // @BasePath /
-
 func main() {
 	cfg, err := configs.GetConfig()
 	if err != nil {
@@ -31,12 +29,12 @@ func main() {
 	usrStorage := database.NewUserStorage(db)
 	sessionStorage := database.NewSessionStorage(*cfg)
 
-	fmt.Printf("Starting a server on address: %s", address)
+	log.Printf("Starting a server on address: %s", address)
 
 	err = app.CreateAndRunTaskServer(address, *taskStorage, *usrStorage, *sessionStorage)
 
 	if err != nil {
-		fmt.Printf("Can't run the server: %s", err.Error())
+		log.Printf("Can't run the server: %s", err.Error())
 		return
 	}
 

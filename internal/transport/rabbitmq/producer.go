@@ -6,12 +6,13 @@ import (
 	"encoding/json"
 	"fmt"
 	amqp "github.com/rabbitmq/amqp091-go"
+	"log"
 )
 
 func SendCode(data entity.CodeRequest) {
 	cfg, err := configs.GetConfig()
 	if err != nil {
-		fmt.Printf("unable to parse config file: %s", err)
+		log.Printf("unable to parse config file: %s", err)
 		return
 	}
 	amqpUrl := fmt.Sprintf("amqp://%s:%s@%s:%d/",
@@ -21,7 +22,7 @@ func SendCode(data entity.CodeRequest) {
 		cfg.RabbitMQ.Port)
 	conn, err := amqp.Dial(amqpUrl) // Создаем подключение к RabbitMQ
 	if err != nil {
-		fmt.Printf("Can't run the RabbitMQ server: %s", err.Error())
+		log.Printf("Can't run the RabbitMQ server: %s", err.Error())
 		return
 	}
 	defer func() {
@@ -29,7 +30,7 @@ func SendCode(data entity.CodeRequest) {
 	}()
 	ch, err := conn.Channel()
 	if err != nil {
-		fmt.Printf("Failed to open channel: %s", err.Error())
+		log.Printf("Failed to open channel: %s", err.Error())
 		return
 	}
 	defer func() {
@@ -44,7 +45,7 @@ func SendCode(data entity.CodeRequest) {
 		nil,
 	)
 	if err != nil {
-		fmt.Printf("Failed to declare a queue: %s", err.Error())
+		log.Printf("Failed to declare a queue: %s", err.Error())
 		return
 	}
 	codeJSON, _ := json.Marshal(data)
@@ -59,7 +60,7 @@ func SendCode(data entity.CodeRequest) {
 		},
 	)
 	if err != nil {
-		fmt.Printf("Unable to send a message: %s", err.Error())
+		log.Printf("Unable to send a message: %s", err.Error())
 		return
 	}
 

@@ -2,7 +2,6 @@ package app
 
 import (
 	"HomeWork1/internal/entity"
-	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -25,7 +24,7 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 	}
 	err := os.WriteFile(fileName, []byte(codeInfo.Code), 0777)
 	if err != nil {
-		fmt.Printf("failed to create the file: %s", err.Error())
+		log.Printf("failed to create the file: %s", err.Error())
 		return nil
 	}
 	cmd := exec.Command("docker", "build", "-f", dockerPath, "-t", "code-http_server", "--force-rm", ".")

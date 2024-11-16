@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"log"
 	"net/http"
 )
 
@@ -36,7 +37,7 @@ func (us *UserServer) RegisterHandler(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{
 			"error": err.Error(),
 		})
-		fmt.Println("Ошибка регистрации:", err)
+		log.Printf("registration error: %s ", err)
 		return
 	}
 	newUser.ID = uuid.New().String()
@@ -92,7 +93,7 @@ func (us *UserServer) LoginHandler(ctx *gin.Context) {
 	}
 	err = us.sessionStorage.Post(newSession)
 	if err != nil {
-		fmt.Println(err)
+		log.Println(err)
 	}
 
 }

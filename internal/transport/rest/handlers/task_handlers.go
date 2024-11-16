@@ -60,7 +60,6 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 		})
 		return
 	}
-	ctx.Status(http.StatusCreated)
 	ctx.JSON(http.StatusCreated, gin.H{
 		"task_id": newUUID.String(),
 	})

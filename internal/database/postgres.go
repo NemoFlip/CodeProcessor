@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"fmt"
 	_ "github.com/lib/pq"
+	"log"
 )
 
 func PostgresConnect(cfg configs.Config) (*sql.DB, error) {
@@ -17,11 +18,11 @@ func PostgresConnect(cfg configs.Config) (*sql.DB, error) {
 		cfg.ServerMain.DatabasePostgres.SSLMode)
 	db, err := sql.Open("postgres", dataSourceName)
 	if err != nil {
-		fmt.Printf("Error connecting to tasksdb: %s", err)
+		log.Printf("Error connecting to database: %s", err)
 	}
 	err = db.Ping()
 	if err != nil {
-		fmt.Printf("Error pinging database: %s", err)
+		log.Printf("Error pinging database: %s", err)
 		return nil, err
 	}
 	return db, nil
