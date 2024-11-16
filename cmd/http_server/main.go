@@ -9,11 +9,11 @@ import (
 	"log"
 )
 
-// @title Homework1
+// @title CodeProcessor
 // @version 1.0
-// @description this is my second homework
+// @description App for running user's code in virtual environment
 
-// @host 127.0.0.1:8000
+// @host localhost:8000
 // @BasePath /
 
 func main() {
@@ -23,7 +23,7 @@ func main() {
 	}
 
 	address := fmt.Sprintf(":%d", cfg.ServerMain.Port)
-	db, err := database.ConnectToDB(*cfg)
+	db, err := database.PostgresConnect(*cfg)
 	if err != nil {
 		log.Println(err)
 	}

@@ -7,7 +7,7 @@ COPY . .
 
 RUN go mod download
 
-RUN go build -o /homework1 cmd/app/main.go
+RUN go build -o /homework1 cmd/http_server/main.go
 
 # Stage 2: Final image
 FROM alpine:latest

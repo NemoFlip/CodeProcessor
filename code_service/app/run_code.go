@@ -11,7 +11,7 @@ import (
 
 func RunCode(codeInfo entity.CodeRequest) []byte {
 	var fileName string
-	var dockerPath = "code_service/app"
+	var dockerPath = "code_service/app/dockerfiles"
 	switch codeInfo.Translator {
 	case "python3":
 		fileName = "pyCode.py"
@@ -28,7 +28,7 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		fmt.Printf("failed to create the file: %s", err.Error())
 		return nil
 	}
-	cmd := exec.Command("docker", "build", "-f", dockerPath, "-t", "code-app", "--force-rm", ".")
+	cmd := exec.Command("docker", "build", "-f", dockerPath, "-t", "code-http_server", "--force-rm", ".")
 	if err = cmd.Run(); err != nil {
 		log.Fatalf("Failed to build Docker image: %v", err.Error())
 		return nil
@@ -39,14 +39,14 @@ func RunCode(codeInfo entity.CodeRequest) []byte {
 		"--memory=256m",
 		"--ulimit", "cpu=1",
 		"-e", "LANG="+codeInfo.Translator,
-		"code-app",
+		"code-http_server",
 	)
 
 	output, err := cmd.CombinedOutput()
 	if err != nil {
-		fmt.Printf("failed to run the Docker container: %s\n", err.Error())
+		log.Printf("failed to run the Docker container: %s\n", err.Error())
 		return nil
 	}
-	fmt.Printf("Output:\n%s\n", string(output))
+	log.Printf("Output:\n%s\n", string(output))
 	return output
 }

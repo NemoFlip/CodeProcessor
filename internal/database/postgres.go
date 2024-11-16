@@ -7,7 +7,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func ConnectToDB(cfg configs.Config) (*sql.DB, error) {
+func PostgresConnect(cfg configs.Config) (*sql.DB, error) {
 	dataSourceName := fmt.Sprintf("host=%s port=%d user=%s password=%s dbname=%s sslmode=%s",
 		cfg.ServerMain.DatabasePostgres.Host,
 		cfg.ServerMain.DatabasePostgres.Port,
