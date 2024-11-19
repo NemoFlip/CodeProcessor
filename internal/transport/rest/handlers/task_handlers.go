@@ -4,7 +4,7 @@ import (
 	_ "HomeWork1/docs"
 	"HomeWork1/internal/database"
 	"HomeWork1/internal/entity"
-	"HomeWork1/internal/transport/rabbitmq"
+	"HomeWork1/internal/transport/workers"
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
@@ -72,7 +72,7 @@ func (s *TaskServer) PostHandler(ctx *gin.Context) {
 	}
 	// Request time measuring
 	start := time.Now()
-	rabbitmq.SendCode(codeData)
+	workers.SendCode(codeData)
 	output, err := http.Get("http://code_service:8001/result")
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{

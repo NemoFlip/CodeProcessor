@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"HomeWork1/code_service/app"
+	"HomeWork1/code_service/internal/workers"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -14,7 +14,7 @@ func NewCodeServer() *CodeServer {
 }
 
 func (cs *CodeServer) GetHandler(ctx *gin.Context) {
-	codeOutput := app.ConsumeMessage()
+	codeOutput := workers.ConsumeMessage()
 	if codeOutput != nil {
 		ctx.String(http.StatusOK, string(codeOutput))
 	} else {

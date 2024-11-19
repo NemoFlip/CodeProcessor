@@ -8,7 +8,7 @@ type Config struct {
 		DatabaseRedis    RedisConfig    `yaml:"database_redis"`
 	} `yaml:"server_main"`
 
-	RabbitMQ RabbitMQConfig `yaml:"rabbitmq"`
+	RabbitMQ RabbitMQConfig `yaml:"workers"`
 
 	ServerCode struct {
 		Name string `yaml:"name"`

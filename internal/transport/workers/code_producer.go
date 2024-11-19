@@ -1,4 +1,4 @@
-package rabbitmq
+package workers
 
 import (
 	"HomeWork1/configs"
@@ -20,13 +20,13 @@ func SendCode(data entity.CodeRequest) {
 		cfg.RabbitMQ.Password,
 		cfg.RabbitMQ.Host,
 		cfg.RabbitMQ.Port)
-	conn, err := amqp.Dial(amqpUrl) // Создаем подключение к RabbitMQ
+	conn, err := amqp.Dial(amqpUrl)
 	if err != nil {
 		log.Printf("Can't run the RabbitMQ server: %s", err.Error())
 		return
 	}
 	defer func() {
-		_ = conn.Close() // Закрываем соединение в случае удачной попытки
+		_ = conn.Close()
 	}()
 	ch, err := conn.Channel()
 	if err != nil {

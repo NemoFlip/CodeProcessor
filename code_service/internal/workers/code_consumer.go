@@ -1,6 +1,7 @@
-package app
+package workers
 
 import (
+	"HomeWork1/code_service/internal"
 	"HomeWork1/configs"
 	"HomeWork1/internal/entity"
 	"encoding/json"
@@ -35,7 +36,7 @@ func ConsumeMessage() []byte {
 		return nil
 	}
 	defer func() {
-		_ = ch.Close() // Закрываем канал в случае удачной попытки открытия
+		_ = ch.Close()
 	}()
 	queue, err := ch.QueueDeclare(
 		"codeProcessor",
@@ -60,5 +61,5 @@ func ConsumeMessage() []byte {
 	var codeInfo entity.CodeRequest
 	_ = json.Unmarshal(msg.Body, &codeInfo)
 	// Then we run user's code
-	return RunCode(codeInfo)
+	return app.RunCode(codeInfo)
 }

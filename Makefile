@@ -2,7 +2,7 @@
 all: build run
 
 run:
-	docker-compose up -d
+	docker-compose up
 build:
 	docker-compose build
 clean:

@@ -15,7 +15,7 @@ server_main:
     db: 0
 
 rabbitmq:
-  host: "rabbitmq"
+  host: "workers"
   port: 5672
   username: "guest"
   password: "guest"

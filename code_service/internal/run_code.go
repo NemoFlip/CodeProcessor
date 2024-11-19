@@ -10,7 +10,7 @@ import (
 
 func RunCode(codeInfo entity.CodeRequest) []byte {
 	var fileName string
-	var dockerPath = "code_service/app/dockerfiles"
+	var dockerPath = "code_service/internal/dockerfiles"
 	switch codeInfo.Translator {
 	case "python3":
 		fileName = "pyCode.py"
